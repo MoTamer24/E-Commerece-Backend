@@ -1,6 +1,6 @@
+using Application.DTOs;
 using Application.Interfaces;
 using Application.Interfaces.Services;
-using Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,14 +11,13 @@ namespace WebApplication1.Controllers
     public class CategoriesController : ControllerBase
     {
         private readonly ICategoryService _categoryService;
-        readonly ICategoryRepository  _categoryRepository;
-        private readonly IUnitOfWork _unitOfWork;
+   
+        
 
-        public CategoriesController(ICategoryService categoryService, ICategoryRepository categoryRepository, IUnitOfWork unitOfWork)
+        public CategoriesController(ICategoryService categoryService, IUnitOfWork unitOfWork)
         {
             _categoryService = categoryService;
-            _categoryRepository = categoryRepository;
-            _unitOfWork = unitOfWork;
+      
         }
 
         // GET: api/categories
@@ -26,7 +25,7 @@ namespace WebApplication1.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> GetAllCategories()
         {
-            var categories = await _categoryRepository.GetAllAsync();
+            var categories =await _categoryService.GetAllCategoriesAsync();
             return Ok(categories);
         }
 
@@ -35,7 +34,8 @@ namespace WebApplication1.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> GetCategoryById(int id)
         {
-            var category = await _categoryRepository.GetByIdAsync(id.ToString());
+
+            var category = await  _categoryService.GetCategoryByIdAsync(id);
             if (category == null)
             {
                 return NotFound();
@@ -46,23 +46,22 @@ namespace WebApplication1.Controllers
         // POST: api/categories
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> CreateCategory([FromBody] Category category)
+        public async Task<IActionResult> CreateCategory([FromBody] CreateCategoryDto category)
         {
-            await _categoryRepository.AddAsync(category);
-           await _unitOfWork.SaveAllChangesAsync();
-            return CreatedAtAction(nameof(GetCategoryById), new { id = category.Id }, category);
+            await  _categoryService.CreateCategoryAsync(category);
+          
+            return CreatedAtAction(nameof(GetCategoryById), category);
         }
 
         // PUT: api/categories/5
         [HttpPut("{id}")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> UpdateCategory(int id, [FromBody] Category category)
+        public async Task<IActionResult> UpdateCategory(int id, [FromBody] UpdateCategoryDto category)
         {
-            if (id != category.Id) return BadRequest();
-             _categoryRepository.Update(category);
-             await _unitOfWork.SaveAllChangesAsync();
-            
-            return NoContent();
+           
+            await  _categoryService.UpdateCategoryAsync(id,category);
+         
+            return Ok("has been Created");
         }
 
         // DELETE: api/categories/5
@@ -70,14 +69,13 @@ namespace WebApplication1.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteCategory(int id)
         {
-            var category = await _categoryRepository.GetByIdAsync(id.ToString());
+            var category = await _categoryService.GetCategoryByIdAsync(id);
             if (category == null)
             {
                 return NotFound();
             }
-            _categoryRepository.Remove(category);
-            await _unitOfWork.SaveAllChangesAsync();
-            return NoContent();
+          await  _categoryService.DeleteCategoryAsync(id);
+          return Ok("has been delted");
         }
     }
 }

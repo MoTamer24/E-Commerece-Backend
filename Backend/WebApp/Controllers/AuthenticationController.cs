@@ -31,16 +31,15 @@ namespace WebApplication1.Controllers
                 return BadRequest(ModelState);
             }
 
-            var user = new ApplicationUser() { UserName = registerDto.Email, Email = registerDto.Email };
+            var user = new ApplicationUser() {UserName = registerDto.Email, Email = registerDto.Email };
             var result = await _userManager.CreateAsync(user, registerDto.Password);
 
             if (!result.Succeeded)
             {
                 return BadRequest(result.Errors);
             }
-
-            // Optional: Add a default role
-            // await _userManager.AddToRoleAsync(user, "User");
+            
+            await _userManager.AddToRoleAsync(user, "User");
 
             return Ok(new { Message = "User registered successfully!" });
         }
@@ -79,7 +78,6 @@ namespace WebApplication1.Controllers
 
             var claims = new[]
             {
-                new Claim(JwtRegisteredClaimNames.Sub, user.Id),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
                 // You can add roles here if you have them

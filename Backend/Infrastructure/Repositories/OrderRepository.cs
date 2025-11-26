@@ -12,11 +12,11 @@ public class OrderRepository : GenericRepository<Order> ,IOrderRepository
         
     }
 
-    public async Task<IEnumerable<Order>> GetOrdersByCustomerId(int customerId)
+    public async Task<IEnumerable<Order>> GetOrdersByCustomerId(Guid customerId)
     {
         var orders 
             =await _context.Orders
-                .Where(o => o.UserId == customerId.ToString()).ToListAsync();
+                .Where(o => o.UserId == customerId).ToListAsync();
         return orders;
     }
 

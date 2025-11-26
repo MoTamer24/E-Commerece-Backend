@@ -7,18 +7,20 @@ namespace Infrastructure.Services;
 
 public class ReviewService : IReviewService
 {
-    private readonly IReviewRepository _reviewRepository;
-    private readonly IProductRepository _productRepository; // We need this to validate the product exists
 
-    public ReviewService(IReviewRepository reviewRepository, IProductRepository productRepository)
+
+   private readonly IUnitOfWork _unitOfWork;
+
+        public ReviewService( IUnitOfWork unitOfWork)
     {
-        _reviewRepository = reviewRepository;
-        _productRepository = productRepository;
+        
+         _unitOfWork = unitOfWork;
     }
+
 
     public async Task<IEnumerable<ReviewDto>> GetReviewsForProductAsync(int productId)
     {
-        var reviews = await _reviewRepository.GetReviewsForProductAsync(productId);
+        var reviews = await  _unitOfWork.Reviews.GetReviewsForProductAsync(productId);
         return reviews.Select(r => new ReviewDto 
         { 
             Id = r.Id,
@@ -31,7 +33,7 @@ public class ReviewService : IReviewService
     public async Task<ReviewDto> AddReviewAsync(CreateReviewDto reviewDto)
     {
         // Business Logic: Ensure the product exists before adding a review
-        var product = await _productRepository.GetByIdAsync(reviewDto.ProductId.ToString());
+        var product = await  _unitOfWork.Products.GetByIdAsync(reviewDto.ProductId.ToString());
         if (product == null)
         {
             throw new KeyNotFoundException($"Product with ID {reviewDto.ProductId} not found.");
@@ -45,8 +47,8 @@ public class ReviewService : IReviewService
             // CustomerId would be set here
         };
 
-        await _reviewRepository.AddAsync(reviewEntity);
-        // await _unitOfWork.SaveChangesAsync();
+        await  _unitOfWork.Reviews.AddAsync(reviewEntity);
+       
 
         return new ReviewDto { Id = reviewEntity.Id, Rating = reviewEntity.Rating, Comment = reviewEntity.Comment };
     }

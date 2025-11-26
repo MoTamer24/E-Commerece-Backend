@@ -1,6 +1,5 @@
 using Application.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using Application.Interfaces;
 using System.Linq.Expressions;
 // This using statement points to your Application layer's interfaces
 namespace Infrastructure;

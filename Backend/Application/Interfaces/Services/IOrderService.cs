@@ -12,14 +12,14 @@ public interface IOrderService
     /// </summary>
     /// <param name="customerId">The ID of the customer placing the order.</param>
     /// <returns>A summary of the newly created, pending order.</returns>
-    Task<OrderSummaryDto> CreateOrderAsync(string customerId);
+    Task<OrderSummaryDto> CreateOrderAsync(Guid customerId);
 
     /// <summary>
     /// Gets a list of all orders for a specific user.
     /// (You had this one: GetUserOrders - excellent!)
     /// </summary>
     /// <param name="customerId">The ID of the customer.</param>
-    Task<IEnumerable<OrderSummaryDto>> GetOrdersForCustomerAsync(int customerId);
+    Task<IEnumerable<OrderSummaryDto>> GetOrdersForCustomerAsync(Guid customerId);
     
     /// <summary>
     /// Gets the full details of a single order.

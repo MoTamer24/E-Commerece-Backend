@@ -18,13 +18,13 @@ public class OrderDetailsDto
     public string Status { get; set; } = "Pending"; // e.g., "Pending", "Paid", "Shipped"
 
     // Shipping Address fields (copied at time of order)
-    public string ShippingStreet { get; set; }
-    public string ShippingCity { get; set; }
-    public string ShippingPostalCode { get; set; }
-    public string ShippingCountry { get; set; }
+    public string? ShippingStreet { get; set; }
+    public string? ShippingCity { get; set; }
+    public string? ShippingPostalCode { get; set; }
+    public string? ShippingCountry { get; set; }
     
     // Foreign Key
-    public string UserId { get; set; } // FK to ApplicationUser (uses string ID from Identity)
+    public Guid UserId { get; set; } // FK to ApplicationUser (uses string ID from Identity)
 
     // Navigation Properties
     public ApplicationUser User { get; set; }

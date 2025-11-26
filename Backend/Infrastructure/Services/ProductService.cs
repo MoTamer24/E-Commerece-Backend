@@ -1,27 +1,27 @@
 using Application.Interfaces;
 using Application.Interfaces.Services;
 using Application.DTOs;
-using Domain.Entities; // Assuming your Product entity is here
+using Domain.Entities; 
 
 namespace Infrastructure.Services;
 
 public class ProductService : IProductService
 {
-    private readonly IProductRepository _productRepository;
+  
     
-    // You would inject your IUnitOfWork here as well
-    // private readonly IUnitOfWork _unitOfWork;
 
-    public ProductService(IProductRepository productRepository /*, IUnitOfWork unitOfWork */)
+     private readonly IUnitOfWork _unitOfWork;
+
+    public ProductService( IUnitOfWork unitOfWork)
     {
-        _productRepository = productRepository;
-        // _unitOfWork = unitOfWork;
+        
+         _unitOfWork = unitOfWork;
     }
 
     // --- READ METHODS ---
     public async Task<IEnumerable<ProductCatalogDto>> GetProductsForCatalogAsync()
     {
-        var productEntities = await _productRepository.GetAllAsync();
+        var productEntities = await  _unitOfWork.Products.GetAllAsync();
    
         return productEntities.Select(p => new ProductCatalogDto()
         {
@@ -34,7 +34,7 @@ public class ProductService : IProductService
     public async Task<ProductDetailsDto?> GetProductByIdAsync(int productId)
     {
         // For this method, we can use the specific repository method if it includes related data
-        var productEntity = await _productRepository.GetByIdAsync(productId.ToString());
+        var productEntity = await  _unitOfWork.Products.GetByIdAsync(productId.ToString());
        
         if (productEntity is null)
         {
@@ -76,7 +76,7 @@ public class ProductService : IProductService
         };
 
         // 3. Add to Repository (in-memory)
-        await _productRepository.AddAsync(newProductEntity);
+        await  _unitOfWork.Products.AddAsync(newProductEntity);
 
         // 4. (Your Unit of Work will call SaveChangesAsync() here)
         
@@ -97,7 +97,7 @@ public class ProductService : IProductService
     public async Task UpdateProductAsync(int productId, UpdateProductDto productDto)
     {
         // 1. Fetch the existing entity
-        var existingProduct = await _productRepository.GetByIdAsync(productId.ToString());
+        var existingProduct = await  _unitOfWork.Products.GetByIdAsync(productId.ToString());
 
         // 2. Validate it exists
         if (existingProduct is null)
@@ -119,14 +119,14 @@ public class ProductService : IProductService
     public async Task DeleteProductAsync(int productId)
     {
         // 1. Fetch the existing entity
-        var productToDelete = await _productRepository.GetByIdAsync(productId.ToString());
+        var productToDelete = await  _unitOfWork.Products.GetByIdAsync(productId.ToString());
 
         // 2. Validate it exists
         if (productToDelete is null)
             throw new KeyNotFoundException($"Product with ID {productId} not found.");
 
         // 3. Remove from Repository (in-memory)
-        _productRepository.Remove(productToDelete);
+         _unitOfWork.Products.Remove(productToDelete);
 
         // Your Unit of Work will call SaveChangesAsync() to apply the delete.
     }

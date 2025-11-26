@@ -6,7 +6,7 @@ public class Cart
     public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
     
     // Foreign Key (Can be nullable if you support anonymous users)
-    public string UserId { get; set; }
+    public Guid UserId { get; set; }
 
     // Navigation Properties
     public ApplicationUser User { get; set; }

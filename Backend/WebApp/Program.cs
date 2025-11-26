@@ -2,19 +2,22 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Infrastructure;
+using Application.Interfaces;
 using Domain.Entities.Identity;
 using System.Text;
-using Infrastructure; // Your DbContext namespace
+
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
 
 // --- Add your DbContext ---
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(configuration.GetConnectionString("DefaultConnection")));
 Console.WriteLine("here it comes ");
 // --- Add ASP.NET Core Identity ---
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+builder.Services.AddIdentity<ApplicationUser, ApplicationRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 Console.WriteLine("whaaaat ");
@@ -28,7 +31,7 @@ builder.Services.AddAuthentication(options =>
     .AddJwtBearer(options =>
     {
         options.SaveToken = true;
-        options.RequireHttpsMetadata = false; // Set to true in production
+        options.RequireHttpsMetadata = false; 
         options.TokenValidationParameters = new TokenValidationParameters()
         {
             ValidateIssuer = true,
@@ -41,8 +44,7 @@ builder.Services.AddAuthentication(options =>
 
 
 builder.Services.AddControllers();
-// ... Add your other services (IUnitOfWork, repositories, etc.)
-
+Console.WriteLine("did we got here ");
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -60,5 +62,24 @@ app.UseAuthorization();  // Then, what are they allowed to do?
 
 
 app.MapControllers();
+
+using (var scope = app.Services.CreateScope())
+{
+    // Resolve the RoleManager from the container
+    // NOTE: If you changed to IdentityRole<Guid> in the previous step, use RoleManager<IdentityRole<Guid>> here!
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
+
+    var roles = new[] { "Admin", "User" };
+
+    foreach (var role in roles)
+    {
+        // Check if role exists
+        if (!await roleManager.RoleExistsAsync(role))
+        {
+            // Create it if it doesn't
+            await roleManager.CreateAsync(new ApplicationRole(role));
+        }
+    }
+}
 
 app.Run();

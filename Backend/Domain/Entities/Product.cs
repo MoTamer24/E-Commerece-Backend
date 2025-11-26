@@ -11,7 +11,7 @@ public class Product
     public decimal Price { get; set; } // Use decimal for currency
     [ConcurrencyCheck]
     public int StockQuantity { get; set; }
-    public string ImageUrl { get; set; }
+    public string? ImageUrl { get; set; }
     
     // Foreign Key
     public int CategoryId { get; set; }

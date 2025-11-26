@@ -1,5 +1,4 @@
-using System.Data.Common;
-using System.Text;
+
 using Application.Interfaces.Services;
 using Application.DTOs;
 using Application.Interfaces;
@@ -9,42 +8,29 @@ namespace Infrastructure.Services;
 
 public class OrderService : IOrderService
 {
-    private readonly IOrderRepository _orderRepository;
-    private readonly ICartRepository _cartRepository;
-    private readonly IProductRepository _productRepository;
+   
     private readonly IUnitOfWork _unitOfWork;
 
     public OrderService(
-        IOrderRepository orderRepository,
-        ICartRepository cartRepository,
-        IProductRepository productRepository,
+     
         IUnitOfWork unitOfWork)
     {
-        _orderRepository = orderRepository;
-        _cartRepository = cartRepository;
-        _productRepository = productRepository;
+       
         _unitOfWork = unitOfWork;
     }
-    /// <summary>
-    /// The main "checkout" use case. It handles the entire process:
-    /// validating the cart, checking stock, creating a pending order, and reserving items.
-    /// This ONE method will internally do the "load", "check stock", and "calculate amount" steps you listed.
-    /// </summary>
-    /// <param name="customerId">The ID of the customer placing the order.</param>
-    /// <returns>A summary of the newly created, pending order.</returns>
-    public async Task<OrderSummaryDto> CreateOrderAsync(string customerId)
+       public async Task<OrderSummaryDto> CreateOrderAsync(Guid customerId)
     {
         // load cart items 
        // --- The parts you did perfectly ---
 
 // 1. Load cart items
-var customerCartItems = (await _cartRepository.GetCartByCustomerId(customerId)).CartItems;
+var customerCartItems = (await _unitOfWork.Carts.GetCartByCustomerId(customerId)).CartItems;
 
 // 2. Get all product IDs from the cart (using a cleaner LINQ method)
 var productIds = customerCartItems.Select(item => item.ProductId).ToList();
 
 // 3. Get all product info in ONE database call (excellent optimization!)
-var productsFromDb = await _productRepository.GetProductsById(productIds);
+var productsFromDb = await  _unitOfWork.Products.GetProductsById(productIds);
 
 // --- The corrected loop logic ---
 
@@ -89,14 +75,14 @@ foreach (var cartItem in customerCartItems)
 // --- Next steps would be to create the Order and save ---
 var newOrder = new Order
 {
-    UserId = customerId.ToString(),
+    UserId = customerId,
     OrderDate = DateTime.UtcNow,
     TotalAmount = totalAmount,
     Status = "Pending Payment",
     OrderItems = orderItems
 };
 
-await _orderRepository.AddAsync(newOrder);
+await _unitOfWork.Orders.AddAsync(newOrder);
 
 // The ConcurrencyCheck will happen here when you save!
         try
@@ -122,10 +108,10 @@ await _orderRepository.AddAsync(newOrder);
     /// (You had this one: GetUserOrders - excellent!)
     /// </summary>
     /// <param name="customerId">The ID of the customer.</param>
-    public async Task<IEnumerable<OrderSummaryDto>> GetOrdersForCustomerAsync(int customerId)
+    public async Task<IEnumerable<OrderSummaryDto>> GetOrdersForCustomerAsync(Guid customerId)
     {
       
-       var orders= await _orderRepository.GetOrdersByCustomerId(customerId);
+       var orders= await  _unitOfWork.Orders.GetOrdersByCustomerId(customerId);
        return orders.Select(order => new OrderSummaryDto
        {
            OrderDate = order.OrderDate,
@@ -141,7 +127,7 @@ await _orderRepository.AddAsync(newOrder);
     /// <param name="orderId">The ID of the order.</param>
     public async Task<OrderDetailsDto?> GetOrderDetailsAsync(int orderId)
     { 
-        var order =await _orderRepository.GetOrderDetails(orderId);
+        var order =await  _unitOfWork.Orders.GetOrderDetails(orderId);
         if (order == null)
         {
             throw new Exception("no Order with this Id");
@@ -173,7 +159,7 @@ await _orderRepository.AddAsync(newOrder);
     /// <param name="newStatus">The new status string.</param>
     public async Task UpdateOrderStatusAsync(int orderId, string newStatus)
     {
-        var order =await _orderRepository.GetByIdAsync(orderId.ToString());
+        var order =await  _unitOfWork.Orders.GetByIdAsync(orderId.ToString());
         if (order == null)
         {
             throw new Exception("no Order with this Id");
@@ -198,7 +184,7 @@ await _orderRepository.AddAsync(newOrder);
     {
         // STEP 1: Get the complete order, including its items.
         // We need a specific repository method for this to ensure OrderItems are loaded.
-        var order = await _orderRepository.GetOrderDetails(orderId);
+        var order = await  _unitOfWork.Orders.GetOrderDetails(orderId);
 
         if (order == null)
         {
@@ -221,7 +207,7 @@ await _orderRepository.AddAsync(newOrder);
         // STEP 3: Restore the stock for each product in the order.
         // This logic is the reverse of the CreateOrderAsync method.
         var productIds = order.OrderItems.Select(item => item.ProductId).ToList();
-        var productsToUpdate = await _productRepository.GetProductsById(productIds);
+        var productsToUpdate = await  _unitOfWork.Products.GetProductsById(productIds);
         var productDict = productsToUpdate.ToDictionary(p => p.Id);
 
         foreach (var orderItem in order.OrderItems)

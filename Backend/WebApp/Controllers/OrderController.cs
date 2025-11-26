@@ -23,19 +23,21 @@ public class OrderController : ControllerBase
     [HttpPost("checkout")]
     public async Task<IActionResult> CheckOut() // make order and handel payment 
     {
-        OrderSummaryDto order;
-        try
-        { 
-            order=  await _orderService.CreateOrderAsync(ClaimTypes.NameIdentifier.FirstOrDefault().ToString());
-        }
-        catch (Exception e)
-        {
-            
-            Console.WriteLine(e);
-            Console.WriteLine("I focken told ya ");
-            Console.WriteLine(ClaimTypes.NameIdentifier);
-            throw e;
-        }
+
+          var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier); 
+          OrderSummaryDto order;
+            // 2. Parse it to a Guid (since your service expects a Guid)
+            if (Guid.TryParse(userIdString, out Guid userId))
+            {
+                // 3. Call your service
+                 order = await _orderService.CreateOrderAsync(userId);
+            }
+            else
+            {
+                // Handle the case where ID is null or invalid (e.g., return Unauthorized)
+                return Unauthorized("User ID not found in token.");
+            }
+    
 
         var aThing=await _paymentService.CreateOrUpdatePaymentIntent(order.OrderId);
 

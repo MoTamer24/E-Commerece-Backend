@@ -15,10 +15,10 @@ public class CartRepository : GenericRepository<Cart>, ICartRepository
         _context = context;
     }
 
-    public async Task<Cart?> GetCartByCustomerId(string userId)
+    public async Task<Cart?> GetCartByCustomerId(Guid userId)
     {
         return await _context.Carts.Include(c => c.CartItems)
             .ThenInclude(i => i.Product) // Important: load the product details for each item
-            .FirstOrDefaultAsync(c => c.UserId == userId.ToString());
+            .FirstOrDefaultAsync(c => c.UserId == userId);
     }
 }

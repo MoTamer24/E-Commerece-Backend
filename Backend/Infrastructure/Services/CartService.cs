@@ -7,29 +7,26 @@ using Application.DTOs;
 public class CartService : ICartService
 {
     private readonly IUnitOfWork _unitOfWork;
-    private readonly ICartRepository _cartRepository;
-    private readonly IProductRepository _ProductRepository;
+
     private readonly IGenericRepository<CartItem> _cartItemRepository;
 
 
     public CartService
-        (IUnitOfWork unitOfWork,ICartRepository cartRepository,
-            IProductRepository productRepository , IGenericRepository<CartItem> cartItemRepository)
+        (IUnitOfWork unitOfWork, IGenericRepository<CartItem> cartItemRepository)
     {
         _unitOfWork = unitOfWork;
-        _cartRepository = cartRepository;
-        _ProductRepository=productRepository;
+
         _cartItemRepository = cartItemRepository;
     }
 
-    public async Task AddToCartAsync(string userId, int productId, int quantity)
+    public async Task AddToCartAsync(Guid userId, int productId, int quantity)
     {
         // 1. Get the user's cart (or create one if it doesn't exist)
-        var cart = await _cartRepository.GetCartByCustomerId(userId);
+        var cart = await _unitOfWork.Carts.GetCartByCustomerId(userId);
         if (cart == null)
         {
-            cart = new Cart { UserId = userId.ToString() };
-            await _cartRepository.AddAsync(cart);
+            cart = new Cart { UserId = userId };
+            await  _unitOfWork.Carts.AddAsync(cart);
         }
 
         // 2. Check if the product is already in the cart
@@ -44,7 +41,7 @@ public class CartService : ICartService
         {
             // If not, add a new CartItem
             // You should also validate that the product exists and has stock
-            var product = await _ProductRepository.GetByIdAsync(productId.ToString());
+            var product = await  _unitOfWork.Products.GetByIdAsync(productId.ToString());
             if (product == null) throw new Exception("Product not found");
 
             cart.CartItems.Add(new CartItem { ProductId = productId, Quantity = quantity });
@@ -54,9 +51,9 @@ public class CartService : ICartService
         await _unitOfWork.SaveAllChangesAsync();
     }
 
-    public async Task<CartDto> GetCartAsync(string userId)
+    public async Task<CartDto> GetCartAsync(Guid userId)
     {
-        var cart = await _cartRepository.GetCartByCustomerId(userId);
+        var cart = await _unitOfWork.Carts.GetCartByCustomerId(userId);
         if (cart == null)
         {
             return new CartDto(); // Return an empty cart
@@ -77,9 +74,9 @@ public class CartService : ICartService
         return cartDto;
     }
 
-    public async Task RemoveFromCartAsync(string userId, int productId)
+    public async Task RemoveFromCartAsync(Guid userId, int productId)
     {
-        var cart = await _cartRepository.GetCartByCustomerId(userId);
+        var cart = await  _unitOfWork.Carts.GetCartByCustomerId(userId);
         if (cart == null) return; 
 
         var cartItem = cart.CartItems.FirstOrDefault(i => i.ProductId == productId);
