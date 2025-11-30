@@ -41,7 +41,7 @@ public class CartService : ICartService
         {
             // If not, add a new CartItem
             // You should also validate that the product exists and has stock
-            var product = await  _unitOfWork.Products.GetByIdAsync(productId.ToString());
+            var product = await  _unitOfWork.Products.GetByIdAsync(productId);
             if (product == null) throw new Exception("Product not found");
 
             cart.CartItems.Add(new CartItem { ProductId = productId, Quantity = quantity });

@@ -32,9 +32,6 @@ var productIds = customerCartItems.Select(item => item.ProductId).ToList();
 // 3. Get all product info in ONE database call (excellent optimization!)
 var productsFromDb = await  _unitOfWork.Products.GetProductsById(productIds);
 
-// --- The corrected loop logic ---
-
-// Convert to a Dictionary for easy lookup. This is the key fix!
 var productDict = productsFromDb.ToDictionary(p => p.Id);
 
 decimal totalAmount = 0;
@@ -42,7 +39,7 @@ var orderItems = new List<OrderItem>();
 
 foreach (var cartItem in customerCartItems)
 {
-    // A. Find the product safely
+
     if (!productDict.TryGetValue(cartItem.ProductId, out var product))
     {
         // This product doesn't exist in the DB, which is a serious issue.
@@ -55,13 +52,11 @@ foreach (var cartItem in customerCartItems)
         throw new InvalidOperationException($"Not enough stock for product: {product.Name}. Available: {product.StockQuantity}, Requested: {cartItem.Quantity}");
     }
 
-    // C. Calculate the total correctly (using PRICE, not stock)
     totalAmount += product.Price * cartItem.Quantity;
 
-    // D. Reduce the stock in memory
+
     product.StockQuantity -= cartItem.Quantity;
-    
-    // E. Create the OrderItem for the new Order
+
     orderItems.Add(new OrderItem
     {
         ProductId = product.Id,
@@ -84,7 +79,7 @@ var newOrder = new Order
 
 await _unitOfWork.Orders.AddAsync(newOrder);
 
-// The ConcurrencyCheck will happen here when you save!
+
         try
         {
             await _unitOfWork.SaveAllChangesAsync();
@@ -159,7 +154,7 @@ await _unitOfWork.Orders.AddAsync(newOrder);
     /// <param name="newStatus">The new status string.</param>
     public async Task UpdateOrderStatusAsync(int orderId, string newStatus)
     {
-        var order =await  _unitOfWork.Orders.GetByIdAsync(orderId.ToString());
+        var order =await  _unitOfWork.Orders.GetByIdAsync(orderId);
         if (order == null)
         {
             throw new Exception("no Order with this Id");

@@ -13,7 +13,7 @@ public class ReviewRepository : GenericRepository<Review>, IReviewRepository
 
     public async Task<IEnumerable<Review>> GetReviewsForProductAsync(int productId)
     {
-        return await _context.Reviews
+        return await _context.Reviews.Include(r=>r.User).Include(r=>r.Product)
             .Where(r => r.ProductId == productId)
             .ToListAsync();
     }

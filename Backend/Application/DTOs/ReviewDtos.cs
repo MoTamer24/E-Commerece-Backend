@@ -13,7 +13,7 @@ public class ReviewDto
 public class CreateReviewDto
 {
     public int ProductId { get; set; }
-    public int CustomerId { get; set; }
+    public Guid CustomerId { get; set; }
     public int Rating { get; set; }
     public string Comment { get; set; } = string.Empty;
 }

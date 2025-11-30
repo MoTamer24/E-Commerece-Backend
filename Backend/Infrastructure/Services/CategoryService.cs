@@ -24,7 +24,7 @@ public class CategoryService : ICategoryService
 
     public async Task<CategoryDto?> GetCategoryByIdAsync(int id)
     {
-        var category = await  _unitOfWork.Categories.GetByIdAsync(id.ToString());
+        var category = await  _unitOfWork.Categories.GetByIdAsync(id);
         if (category is null) return null;
         return new CategoryDto { Id = category.Id, Name = category.Name };
     }
@@ -39,7 +39,7 @@ public class CategoryService : ICategoryService
 
     public async Task UpdateCategoryAsync(int id, UpdateCategoryDto categoryDto)
     {
-        var categoryEntity = await  _unitOfWork.Categories.GetByIdAsync(id.ToString());
+        var categoryEntity = await  _unitOfWork.Categories.GetByIdAsync(id);
         if (categoryEntity is null)
             throw new KeyNotFoundException("Category not found.");
 
@@ -49,7 +49,7 @@ public class CategoryService : ICategoryService
 
     public async Task DeleteCategoryAsync(int id)
     {
-        var categoryEntity = await  _unitOfWork.Categories.GetByIdAsync(id.ToString());
+        var categoryEntity = await  _unitOfWork.Categories.GetByIdAsync(id);
         if (categoryEntity is null)
             throw new KeyNotFoundException("Category not found.");
 

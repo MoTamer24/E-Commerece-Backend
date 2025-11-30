@@ -8,6 +8,7 @@ public interface IProductService
     /// </summary>
     /// <returns>A collection of products with basic catalog information.</returns>
     Task<IEnumerable<ProductCatalogDto>> GetProductsForCatalogAsync();
+    Task<IEnumerable<ProductCatalogDto>> GetAll();
 
     /// <summary>
     /// Gets a single product's detailed information by its ID.

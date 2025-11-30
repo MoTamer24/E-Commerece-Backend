@@ -1,4 +1,6 @@
+using Application.DTOs;
 using Application.Interfaces;
+using Application.Interfaces.Services;
 using Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,13 +12,12 @@ namespace WebApplication1.Controllers
     [ApiController]
     public class ReviewsController : ControllerBase
     {
-        // Using IGenericRepository since Review doesn't have a custom one
-        private readonly IGenericRepository<Review> _reviewRepository;
+        private readonly IReviewService _reviewService;
         private readonly IUnitOfWork _unitOfWork;
 
-        public ReviewsController(IGenericRepository<Review> reviewRepository, IUnitOfWork unitOfWork)
+        public ReviewsController(IReviewService reviewRepository, IUnitOfWork unitOfWork)
         {
-            _reviewRepository = reviewRepository;
+            _reviewService = reviewRepository;
             _unitOfWork = unitOfWork;
         }
 
@@ -25,22 +26,20 @@ namespace WebApplication1.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> GetReviewsForProduct(int productId)
         {
-            var allReviews = await _reviewRepository.GetAllAsync();
-            var productReviews = allReviews.Where(r => r.ProductId == productId);
+            var productReviews = await _reviewService.GetReviewsForProductAsync(productId);
             return Ok(productReviews);
         }
 
         // POST: api/reviews
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> CreateReview([FromBody] Review review)
+        public async Task<IActionResult> CreateReview([FromBody] CreateReviewDto review)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId == null) return Unauthorized();
-
-            review.UserId = userId;
-
-            await _reviewRepository.AddAsync(review);
+            Guid.TryParse(userId,out Guid UserGuid);
+            review.CustomerId=UserGuid;
+            await _reviewService.AddReviewAsync(review);
             await _unitOfWork.SaveAllChangesAsync();
             return Ok(review);
         }
@@ -50,17 +49,7 @@ namespace WebApplication1.Controllers
         [Authorize]
         public async Task<IActionResult> DeleteReview(int id)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var review = await _reviewRepository.GetByIdAsync(id.ToString());
-
-            if (review == null) return NotFound();
-
-            if (review.UserId != userId)
-            {
-                return Forbid();
-            }
-
-            _reviewRepository.Remove(review);
+            _reviewService.Delete(id);
             await _unitOfWork.SaveAllChangesAsync();
             return NoContent();
         }

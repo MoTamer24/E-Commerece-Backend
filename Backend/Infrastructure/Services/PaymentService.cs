@@ -13,8 +13,7 @@ namespace Infrastructure.Services
  
 
 
-        public MockPaymentService(IConfiguration config, IUnitOfWork unitOfWork, IOrderRepository orderRepository,
-            IPaymentRepository paymentRepository)
+        public MockPaymentService(IConfiguration config, IUnitOfWork unitOfWork)
         {
             _config = config;
             _unitOfWork = unitOfWork;
@@ -23,8 +22,10 @@ namespace Infrastructure.Services
 
         public async Task<string> CreateOrUpdatePaymentIntent(int orderId)
         {
-            var order = await  _unitOfWork.Orders.GetByIdAsync(orderId.ToString());
+            var order = await  _unitOfWork.Orders.GetByIdAsync(orderId);
             if (order == null) throw new KeyNotFoundException("Order not found");
+
+          await _unitOfWork.SaveAllChangesAsync();
 
             return Guid.NewGuid().ToString();
         }

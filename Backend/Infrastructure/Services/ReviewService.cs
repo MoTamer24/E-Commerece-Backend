@@ -17,6 +17,24 @@ public class ReviewService : IReviewService
          _unitOfWork = unitOfWork;
     }
 
+    public async void Delete(int reviewId)
+    {
+        var review = await  _unitOfWork.Reviews.GetByIdAsync(reviewId);
+      _unitOfWork.Reviews.Remove(review);
+    }
+
+
+      public async Task<ReviewDto> get(int reviewId)
+    {
+        var review = await  _unitOfWork.Reviews.GetByIdAsync(reviewId);
+
+        return new ReviewDto()
+        {
+            Comment=review.Comment,
+            Rating=review.Rating,
+            ReviewerName=review.User.UserName,
+        };
+    }
 
     public async Task<IEnumerable<ReviewDto>> GetReviewsForProductAsync(int productId)
     {
@@ -26,14 +44,14 @@ public class ReviewService : IReviewService
             Id = r.Id,
             Rating = r.Rating,
             Comment = r.Comment,
-            ReviewerName = "Anonymous" // Or get from Customer entity
+            ReviewerName = r.User.UserName
         });
     }
 
     public async Task<ReviewDto> AddReviewAsync(CreateReviewDto reviewDto)
     {
         // Business Logic: Ensure the product exists before adding a review
-        var product = await  _unitOfWork.Products.GetByIdAsync(reviewDto.ProductId.ToString());
+        var product = await  _unitOfWork.Products.GetByIdAsync(reviewDto.ProductId);
         if (product == null)
         {
             throw new KeyNotFoundException($"Product with ID {reviewDto.ProductId} not found.");

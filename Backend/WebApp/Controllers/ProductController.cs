@@ -1,7 +1,9 @@
 using Application.Interfaces;
+using Application.Interfaces.Services;
 using Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Application.DTOs;
 
 namespace WebApplication1.Controllers
 {
@@ -9,13 +11,13 @@ namespace WebApplication1.Controllers
     [ApiController]
     public class ProductsController : ControllerBase
     {
-        private readonly IProductRepository _productRepository;
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IProductService _productService;
+        
 
-        public ProductsController(IProductRepository productRepository, IUnitOfWork unitOfWork)
+
+        public ProductsController(IProductService productService)
         {
-            _productRepository = productRepository;
-            _unitOfWork = unitOfWork;
+            _productService = productService;
         }
 
         // GET: api/products
@@ -23,7 +25,11 @@ namespace WebApplication1.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> GetAllProducts()
         {
-            var products = await _productRepository.GetAllAsync();
+            var products = await _productService.GetAll();
+             if (products == null)
+            {
+                return NotFound();
+            }
             return Ok(products);
         }
 
@@ -32,7 +38,7 @@ namespace WebApplication1.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> GetProductById(int id)
         {
-            var product = await _productRepository.GetByIdAsync(id.ToString());
+            var product = await _productService.GetProductByIdAsync(id);
             if (product == null)
             {
                 return NotFound();
@@ -43,21 +49,18 @@ namespace WebApplication1.Controllers
         // POST: api/products
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> CreateProduct([FromBody] Product product)
+        public async Task<IActionResult> CreateProduct([FromBody]AddProductDto product)
         {
-            await _productRepository.AddAsync(product);
-            await _unitOfWork.SaveAllChangesAsync();
-            return CreatedAtAction(nameof(GetProductById), new { id = product.Id }, product);
+            await _productService.CreateProductAsync(product);
+            return CreatedAtAction(nameof(GetProductById), product);
         }
 
         // PUT: api/products/5
         [HttpPut("{id}")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> UpdateProduct(int id, [FromBody] Product product)
+        public async Task<IActionResult> UpdateProduct(int id, [FromBody] UpdateProductDto product)
         {
-            if (id != product.Id) return BadRequest();
-            _productRepository.Update(product);
-            await _unitOfWork.SaveAllChangesAsync();
+            await _productService.UpdateProductAsync(id,product);
             return NoContent();
         }
 
@@ -66,10 +69,9 @@ namespace WebApplication1.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteProduct(int id)
         {
-            var product = await _productRepository.GetByIdAsync(id.ToString());
+            var product = await _productService.GetProductByIdAsync(id);
             if (product == null) return NotFound();
-            _productRepository.Remove(product);
-            await _unitOfWork.SaveAllChangesAsync();
+            await _productService.DeleteProductAsync(product.id);
             return NoContent();
         }
     }
