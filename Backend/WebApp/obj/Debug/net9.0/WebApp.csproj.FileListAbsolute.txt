@@ -56,7 +56,6 @@
 /home/motamerf/MoRoom/Play_Ground/Projects/E-Commerce Proj-FullStack/Backend/WebApp/bin/Debug/net9.0/System.Composition.Runtime.dll
 /home/motamerf/MoRoom/Play_Ground/Projects/E-Commerce Proj-FullStack/Backend/WebApp/bin/Debug/net9.0/System.Composition.TypedParts.dll
 /home/motamerf/MoRoom/Play_Ground/Projects/E-Commerce Proj-FullStack/Backend/WebApp/bin/Debug/net9.0/System.IdentityModel.Tokens.Jwt.dll
-/home/motamerf/MoRoom/Play_Ground/Projects/E-Commerce Proj-FullStack/Backend/WebApp/bin/Debug/net9.0/System.Text.Json.dll
 /home/motamerf/MoRoom/Play_Ground/Projects/E-Commerce Proj-FullStack/Backend/WebApp/bin/Debug/net9.0/cs/Microsoft.CodeAnalysis.resources.dll
 /home/motamerf/MoRoom/Play_Ground/Projects/E-Commerce Proj-FullStack/Backend/WebApp/bin/Debug/net9.0/de/Microsoft.CodeAnalysis.resources.dll
 /home/motamerf/MoRoom/Play_Ground/Projects/E-Commerce Proj-FullStack/Backend/WebApp/bin/Debug/net9.0/es/Microsoft.CodeAnalysis.resources.dll
@@ -172,3 +171,4 @@
 /home/motamerf/MoRoom/Play_Ground/Projects/E-Commerce Proj-FullStack/Backend/WebApp/obj/Debug/net9.0/WebApp.pdb
 /home/motamerf/MoRoom/Play_Ground/Projects/E-Commerce Proj-FullStack/Backend/WebApp/obj/Debug/net9.0/WebApp.genruntimeconfig.cache
 /home/motamerf/MoRoom/Play_Ground/Projects/E-Commerce Proj-FullStack/Backend/WebApp/obj/Debug/net9.0/ref/WebApp.dll
+/home/motamerf/MoRoom/Play_Ground/Projects/E-Commerce Proj-FullStack/Backend/WebApp/obj/Debug/net9.0/swae.build.ex.cache

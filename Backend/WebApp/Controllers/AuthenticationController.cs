@@ -93,5 +93,12 @@ namespace WebApplication1.Controllers
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+
+        // Get: api/auth/test
+        [HttpGet("test")]
+        public async Task<IActionResult> Test()
+        {
+            return Ok(new { Message = "we did it " });     
+        }
     }
 }

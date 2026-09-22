@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Infrastructure;
 using Application.Interfaces;
+using Application.Interfaces.Services;
+using Infrastructure.Services;
 using Domain.Entities.Identity;
 using System.Text;
 
@@ -11,16 +13,23 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
 
-// --- Add your DbContext ---
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<ICartService, CartService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IPaymentService, MockPaymentService>();
+builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IReviewService, ReviewService>();
+
+
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(configuration.GetConnectionString("DefaultConnection")));
-Console.WriteLine("here it comes ");
 // --- Add ASP.NET Core Identity ---
 builder.Services.AddIdentity<ApplicationUser, ApplicationRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
-Console.WriteLine("whaaaat ");
+
 // --- Add JWT Authentication ---
 builder.Services.AddAuthentication(options =>
     {
@@ -44,7 +53,6 @@ builder.Services.AddAuthentication(options =>
 
 
 builder.Services.AddControllers();
-Console.WriteLine("did we got here ");
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
