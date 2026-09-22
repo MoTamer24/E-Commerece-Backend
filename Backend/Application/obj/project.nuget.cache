@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "tBZMqwpf174=",
+  "dgSpecHash": "Vlt1jSiCjLs=",
   "success": true,
   "projectFilePath": "/home/motamerf/MoRoom/Play_Ground/Projects/E-Commerce Proj-FullStack/Backend/Application/Application.csproj",
   "expectedPackageFiles": [
@@ -49,7 +49,9 @@
     "/home/motamerf/.nuget/packages/system.security.cryptography.pkcs/8.0.1/system.security.cryptography.pkcs.8.0.1.nupkg.sha512",
     "/home/motamerf/.nuget/packages/system.security.cryptography.xml/8.0.2/system.security.cryptography.xml.8.0.2.nupkg.sha512",
     "/home/motamerf/.nuget/packages/system.security.principal.windows/5.0.0/system.security.principal.windows.5.0.0.nupkg.sha512",
-    "/home/motamerf/.nuget/packages/system.text.encodings.web/8.0.0/system.text.encodings.web.8.0.0.nupkg.sha512"
+    "/home/motamerf/.nuget/packages/system.text.encodings.web/8.0.0/system.text.encodings.web.8.0.0.nupkg.sha512",
+    "/home/motamerf/.nuget/packages/microsoft.netcore.app.ref/9.0.20/microsoft.netcore.app.ref.9.0.20.nupkg.sha512",
+    "/home/motamerf/.nuget/packages/microsoft.aspnetcore.app.ref/9.0.20/microsoft.aspnetcore.app.ref.9.0.20.nupkg.sha512"
   ],
   "logs": []
 }
