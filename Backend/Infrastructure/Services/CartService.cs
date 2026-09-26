@@ -8,15 +8,11 @@ public class CartService : ICartService
 {
     private readonly IUnitOfWork _unitOfWork;
 
-    private readonly IGenericRepository<CartItem> _cartItemRepository;
-
-
     public CartService
-        (IUnitOfWork unitOfWork, IGenericRepository<CartItem> cartItemRepository)
+        (IUnitOfWork unitOfWork)
     {
         _unitOfWork = unitOfWork;
 
-        _cartItemRepository = cartItemRepository;
     }
 
     public async Task AddToCartAsync(Guid userId, int productId, int quantity)
@@ -83,7 +79,7 @@ public class CartService : ICartService
         if (cartItem != null)
         {
             // 3. Use the repository to explicitly delete the entity
-            _cartItemRepository.Remove(cartItem); // This tells EF to generate a DELETE statement
+            cart.CartItems.Remove(cartItem); // This tells EF to generate a DELETE statement
             await _unitOfWork.SaveAllChangesAsync();
         }
     }
