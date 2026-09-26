@@ -10,5 +10,5 @@ public class Cart
 
     // Navigation Properties
     public ApplicationUser User { get; set; }
-    public ICollection<CartItem> CartItems { get; set; } // Links to the items in the cart
+    public ICollection<CartItem> CartItems { get; set; } =new List<CartItem>();// Links to the items in the cart
 }
