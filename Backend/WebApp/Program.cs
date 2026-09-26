@@ -13,6 +13,7 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
 
+
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
@@ -40,7 +41,7 @@ builder.Services.AddAuthentication(options =>
     .AddJwtBearer(options =>
     {
         options.SaveToken = true;
-        options.RequireHttpsMetadata = false; 
+        options.RequireHttpsMetadata = false;
         options.TokenValidationParameters = new TokenValidationParameters()
         {
             ValidateIssuer = true,
@@ -54,6 +55,9 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddControllers();
 var app = builder.Build();
+
+
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -71,23 +75,41 @@ app.UseAuthorization();  // Then, what are they allowed to do?
 
 app.MapControllers();
 
+        // 2. Read admin credentials from environment configuration
+
+// Run database migrations and seeding in an isolated scope
 using (var scope = app.Services.CreateScope())
 {
-    // Resolve the RoleManager from the container
-    // NOTE: If you changed to IdentityRole<Guid> in the previous step, use RoleManager<IdentityRole<Guid>> here!
-    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
-
-    var roles = new[] { "Admin", "User" };
-
-    foreach (var role in roles)
+    var services = scope.ServiceProvider;
+    
+    try 
     {
-        // Check if role exists
-        if (!await roleManager.RoleExistsAsync(role))
+        // 1. CRITICAL MISSING STEP: Create the database & apply migrations
+        var context = services.GetRequiredService<ApplicationDbContext>();
+        
+        // Use MigrateAsync() if you are using EF Core Migrations (Add-Migration).
+        // If you aren't using migrations yet, use EnsureCreatedAsync() instead.
+        await context.Database.MigrateAsync(); 
+
+        // 2. Seed Roles
+        var roleManager = services.GetRequiredService<RoleManager<ApplicationRole>>();
+        var roles = new[] { "Admin", "User" };
+
+        foreach (var role in roles)
         {
-            // Create it if it doesn't
-            await roleManager.CreateAsync(new ApplicationRole(role));
+            if (!await roleManager.RoleExistsAsync(role))
+            {
+                await roleManager.CreateAsync(new ApplicationRole(role));
+            }
         }
+
+        // 3. Seed Admin User
+        await DbInitializer.SeedAdminAsync(services, configuration);
+    }
+    catch (Exception ex)
+    {
+        // If it still fails, this will actually print the exact error to your console
+        Console.WriteLine($"An error occurred during startup: {ex.Message}");
     }
 }
-
 app.Run();

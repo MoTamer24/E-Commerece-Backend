@@ -31,14 +31,14 @@ namespace WebApplication1.Controllers
                 return BadRequest(ModelState);
             }
 
-            var user = new ApplicationUser() {UserName = registerDto.Email, Email = registerDto.Email };
+            var user = new ApplicationUser() { UserName = registerDto.Email, Email = registerDto.Email };
             var result = await _userManager.CreateAsync(user, registerDto.Password);
 
             if (!result.Succeeded)
             {
                 return BadRequest(result.Errors);
             }
-            
+
             await _userManager.AddToRoleAsync(user, "User");
 
             return Ok(new { Message = "User registered successfully!" });
@@ -52,11 +52,15 @@ namespace WebApplication1.Controllers
             {
                 return BadRequest(ModelState);
             }
+            System.Console.WriteLine(loginDto.Email);
+            System.Console.WriteLine(loginDto.Password);
 
             var user = await _userManager.FindByEmailAsync(loginDto.Email);
+            System.Console.WriteLine($"user: {user}");
+            System.Console.WriteLine(await _userManager.CheckPasswordAsync(user, loginDto.Password));
             if (user != null && await _userManager.CheckPasswordAsync(user, loginDto.Password))
             {
-                var token = GenerateJwtToken( user);
+                var token = GenerateJwtToken(user);
                 return Ok(new { Token = token });
             }
 
@@ -67,7 +71,7 @@ namespace WebApplication1.Controllers
         {
             var jwtKey = _configuration["Jwt:Key"];
             var jwtIssuer = _configuration["Jwt:Issuer"];
-            
+
             if (jwtKey == null || jwtIssuer == null)
             {
                 throw new InvalidOperationException("JWT Key or Issuer is not configured in appsettings.json");
@@ -98,7 +102,7 @@ namespace WebApplication1.Controllers
         [HttpGet("test")]
         public async Task<IActionResult> Test()
         {
-            return Ok(new { Message = "we did it " });     
+            return Ok(new { Message = "we did it " });
         }
     }
 }
