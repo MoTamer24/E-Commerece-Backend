@@ -3,6 +3,7 @@ using Application.Interfaces;
 using Domain.Entities;
 using FluentAssertions;
 using Infrastructure.Services;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 
@@ -14,6 +15,7 @@ public class OrderServiceTests
     private readonly Mock<ICartRepository> _cartRepoMock;
     private readonly Mock<IOrderRepository> _orderRepoMock;
     private readonly Mock<IProductRepository> _productRepoMock;
+    private readonly Mock<ILogger<OrderService>> _loggerMock;
     private readonly OrderService _orderService;
 
     public OrderServiceTests()
@@ -22,12 +24,13 @@ public class OrderServiceTests
         _cartRepoMock = new Mock<ICartRepository>();
         _orderRepoMock = new Mock<IOrderRepository>();
         _productRepoMock = new Mock<IProductRepository>();
+        _loggerMock = new Mock<ILogger<OrderService>>();
 
         _unitOfWorkMock.Setup(u => u.Carts).Returns(_cartRepoMock.Object);
         _unitOfWorkMock.Setup(u => u.Orders).Returns(_orderRepoMock.Object);
         _unitOfWorkMock.Setup(u => u.Products).Returns(_productRepoMock.Object);
 
-        _orderService = new OrderService(_unitOfWorkMock.Object);
+        _orderService = new OrderService(_unitOfWorkMock.Object, _loggerMock.Object);
     }
 
     [Fact]
@@ -123,7 +126,7 @@ public class OrderServiceTests
 
         // Assert
         await act.Should().ThrowAsync<InvalidOperationException>().WithMessage("*Not enough stock*");
-        product.StockQuantity.Should().Be(2); // Stock remains unchanged
+        product.StockQuantity.Should().Be(2);
         _orderRepoMock.Verify(r => r.AddAsync(It.IsAny<Order>()), Times.Never);
     }
 

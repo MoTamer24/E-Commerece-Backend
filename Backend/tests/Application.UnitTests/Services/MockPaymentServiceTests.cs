@@ -5,6 +5,7 @@ using Domain.Entities;
 using FluentAssertions;
 using Infrastructure.Services;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 
@@ -16,6 +17,7 @@ public class MockPaymentServiceTests
     private readonly Mock<IUnitOfWork> _unitOfWorkMock;
     private readonly Mock<IOrderRepository> _orderRepoMock;
     private readonly Mock<IPaymentRepository> _paymentRepoMock;
+    private readonly Mock<ILogger<MockPaymentService>> _loggerMock;
     private readonly MockPaymentService _paymentService;
 
     public MockPaymentServiceTests()
@@ -24,11 +26,12 @@ public class MockPaymentServiceTests
         _unitOfWorkMock = new Mock<IUnitOfWork>();
         _orderRepoMock = new Mock<IOrderRepository>();
         _paymentRepoMock = new Mock<IPaymentRepository>();
+        _loggerMock = new Mock<ILogger<MockPaymentService>>();
 
         _unitOfWorkMock.Setup(u => u.Orders).Returns(_orderRepoMock.Object);
         _unitOfWorkMock.Setup(u => u.Payments).Returns(_paymentRepoMock.Object);
 
-        _paymentService = new MockPaymentService(_configMock.Object, _unitOfWorkMock.Object);
+        _paymentService = new MockPaymentService(_configMock.Object, _unitOfWorkMock.Object, _loggerMock.Object);
     }
 
     [Fact]

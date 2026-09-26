@@ -8,11 +8,16 @@ using Application.Interfaces.Services;
 using Infrastructure.Services;
 using Domain.Entities.Identity;
 using System.Text;
-
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
 
+Log.Logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(builder.Configuration)
+    .CreateLogger();
+
+builder.Host.UseSerilog();
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<ICartService, CartService>();
@@ -21,8 +26,6 @@ builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IPaymentService, MockPaymentService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IReviewService, ReviewService>();
-
-
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(configuration.GetConnectionString("DefaultConnection")));
@@ -56,8 +59,7 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddControllers();
 var app = builder.Build();
 
-
-
+app.UseSerilogRequestLogging();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -71,6 +73,7 @@ app.UseHttpsRedirection();
 // --- IMPORTANT: These must be in this order ---
 app.UseAuthentication(); // First, who is the user?
 app.UseAuthorization();  // Then, what are they allowed to do?
+
 
 
 app.MapControllers();

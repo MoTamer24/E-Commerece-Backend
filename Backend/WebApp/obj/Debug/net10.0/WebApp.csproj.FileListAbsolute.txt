@@ -173,3 +173,12 @@
 /home/motamerf/MoRoom/Play_Ground/Projects/E-Commerce Proj-FullStack/Backend/WebApp/obj/Debug/net10.0/WebApp.pdb
 /home/motamerf/MoRoom/Play_Ground/Projects/E-Commerce Proj-FullStack/Backend/WebApp/obj/Debug/net10.0/WebApp.genruntimeconfig.cache
 /home/motamerf/MoRoom/Play_Ground/Projects/E-Commerce Proj-FullStack/Backend/WebApp/obj/Debug/net10.0/ref/WebApp.dll
+/home/motamerf/MoRoom/Play_Ground/Projects/E-Commerce Proj-FullStack/Backend/WebApp/bin/Debug/net10.0/Serilog.dll
+/home/motamerf/MoRoom/Play_Ground/Projects/E-Commerce Proj-FullStack/Backend/WebApp/bin/Debug/net10.0/Serilog.AspNetCore.dll
+/home/motamerf/MoRoom/Play_Ground/Projects/E-Commerce Proj-FullStack/Backend/WebApp/bin/Debug/net10.0/Serilog.Extensions.Hosting.dll
+/home/motamerf/MoRoom/Play_Ground/Projects/E-Commerce Proj-FullStack/Backend/WebApp/bin/Debug/net10.0/Serilog.Extensions.Logging.dll
+/home/motamerf/MoRoom/Play_Ground/Projects/E-Commerce Proj-FullStack/Backend/WebApp/bin/Debug/net10.0/Serilog.Formatting.Compact.dll
+/home/motamerf/MoRoom/Play_Ground/Projects/E-Commerce Proj-FullStack/Backend/WebApp/bin/Debug/net10.0/Serilog.Settings.Configuration.dll
+/home/motamerf/MoRoom/Play_Ground/Projects/E-Commerce Proj-FullStack/Backend/WebApp/bin/Debug/net10.0/Serilog.Sinks.Console.dll
+/home/motamerf/MoRoom/Play_Ground/Projects/E-Commerce Proj-FullStack/Backend/WebApp/bin/Debug/net10.0/Serilog.Sinks.Debug.dll
+/home/motamerf/MoRoom/Play_Ground/Projects/E-Commerce Proj-FullStack/Backend/WebApp/bin/Debug/net10.0/Serilog.Sinks.File.dll

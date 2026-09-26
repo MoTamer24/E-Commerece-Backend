@@ -3,6 +3,7 @@ using Application.Interfaces;
 using Domain.Entities;
 using FluentAssertions;
 using Infrastructure.Services;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 
@@ -13,6 +14,7 @@ public class CartServiceTests
     private readonly Mock<IUnitOfWork> _unitOfWorkMock;
     private readonly Mock<ICartRepository> _cartRepoMock;
     private readonly Mock<IProductRepository> _productRepoMock;
+    private readonly Mock<ILogger<CartService>> _loggerMock;
     private readonly CartService _cartService;
 
     public CartServiceTests()
@@ -20,11 +22,12 @@ public class CartServiceTests
         _unitOfWorkMock = new Mock<IUnitOfWork>();
         _cartRepoMock = new Mock<ICartRepository>();
         _productRepoMock = new Mock<IProductRepository>();
+        _loggerMock = new Mock<ILogger<CartService>>();
 
         _unitOfWorkMock.Setup(u => u.Carts).Returns(_cartRepoMock.Object);
         _unitOfWorkMock.Setup(u => u.Products).Returns(_productRepoMock.Object);
 
-        _cartService = new CartService(_unitOfWorkMock.Object);
+        _cartService = new CartService(_unitOfWorkMock.Object, _loggerMock.Object);
     }
 
     [Fact]

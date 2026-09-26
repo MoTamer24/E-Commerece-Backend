@@ -4,6 +4,7 @@ using Domain.Entities;
 using Domain.Entities.Identity;
 using FluentAssertions;
 using Infrastructure.Services;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 
@@ -14,6 +15,7 @@ public class ReviewServiceTests
     private readonly Mock<IUnitOfWork> _unitOfWorkMock;
     private readonly Mock<IReviewRepository> _reviewRepoMock;
     private readonly Mock<IProductRepository> _productRepoMock;
+    private readonly Mock<ILogger<ReviewService>> _loggerMock;
     private readonly ReviewService _reviewService;
 
     public ReviewServiceTests()
@@ -21,11 +23,12 @@ public class ReviewServiceTests
         _unitOfWorkMock = new Mock<IUnitOfWork>();
         _reviewRepoMock = new Mock<IReviewRepository>();
         _productRepoMock = new Mock<IProductRepository>();
+        _loggerMock = new Mock<ILogger<ReviewService>>();
 
         _unitOfWorkMock.Setup(u => u.Reviews).Returns(_reviewRepoMock.Object);
         _unitOfWorkMock.Setup(u => u.Products).Returns(_productRepoMock.Object);
 
-        _reviewService = new ReviewService(_unitOfWorkMock.Object);
+        _reviewService = new ReviewService(_unitOfWorkMock.Object, _loggerMock.Object);
     }
 
     [Fact]

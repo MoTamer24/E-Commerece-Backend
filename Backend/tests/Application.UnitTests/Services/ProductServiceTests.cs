@@ -3,6 +3,7 @@ using Application.Interfaces;
 using Domain.Entities;
 using FluentAssertions;
 using Infrastructure.Services;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 
@@ -12,16 +13,18 @@ public class ProductServiceTests
 {
     private readonly Mock<IUnitOfWork> _unitOfWorkMock;
     private readonly Mock<IProductRepository> _productRepoMock;
+    private readonly Mock<ILogger<ProductService>> _loggerMock;
     private readonly ProductService _productService;
 
     public ProductServiceTests()
     {
         _unitOfWorkMock = new Mock<IUnitOfWork>();
         _productRepoMock = new Mock<IProductRepository>();
+        _loggerMock = new Mock<ILogger<ProductService>>();
 
         _unitOfWorkMock.Setup(u => u.Products).Returns(_productRepoMock.Object);
 
-        _productService = new ProductService(_unitOfWorkMock.Object);
+        _productService = new ProductService(_unitOfWorkMock.Object, _loggerMock.Object);
     }
 
     [Fact]

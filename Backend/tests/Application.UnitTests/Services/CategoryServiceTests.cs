@@ -3,6 +3,7 @@ using Application.Interfaces;
 using Domain.Entities;
 using FluentAssertions;
 using Infrastructure.Services;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 
@@ -12,16 +13,18 @@ public class CategoryServiceTests
 {
     private readonly Mock<IUnitOfWork> _unitOfWorkMock;
     private readonly Mock<ICategoryRepository> _categoryRepoMock;
+    private readonly Mock<ILogger<CategoryService>> _loggerMock;
     private readonly CategoryService _categoryService;
 
     public CategoryServiceTests()
     {
         _unitOfWorkMock = new Mock<IUnitOfWork>();
         _categoryRepoMock = new Mock<ICategoryRepository>();
+        _loggerMock = new Mock<ILogger<CategoryService>>();
 
         _unitOfWorkMock.Setup(u => u.Categories).Returns(_categoryRepoMock.Object);
 
-        _categoryService = new CategoryService(_unitOfWorkMock.Object);
+        _categoryService = new CategoryService(_unitOfWorkMock.Object, _loggerMock.Object);
     }
 
     [Fact]
