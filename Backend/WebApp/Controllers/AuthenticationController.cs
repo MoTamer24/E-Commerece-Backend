@@ -52,12 +52,10 @@ namespace WebApplication1.Controllers
             {
                 return BadRequest(ModelState);
             }
-            System.Console.WriteLine(loginDto.Email);
-            System.Console.WriteLine(loginDto.Password);
+
 
             var user = await _userManager.FindByEmailAsync(loginDto.Email);
-            System.Console.WriteLine($"user: {user}");
-            System.Console.WriteLine(await _userManager.CheckPasswordAsync(user, loginDto.Password));
+
             if (user != null && await _userManager.CheckPasswordAsync(user, loginDto.Password))
             {
                 var token = GenerateJwtToken(user);

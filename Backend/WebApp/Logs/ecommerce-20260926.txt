@@ -1,0 +1,46 @@
+2026-09-26 11:53:28.967 +03:00 [WRN] The foreign key property 'Review.UserId1' was created in shadow state because a conflicting property with the simple name 'UserId' exists in the entity type, but is either not mapped, is already used for another relationship, or is incompatible with the associated primary key type. See https://aka.ms/efcore-relationships for information on mapping relationships in EF Core.
+2026-09-26 11:53:30.749 +03:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2026-09-26 11:53:30.881 +03:00 [INF] Executed DbCommand (70ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsLock' AND "type" = 'table';
+2026-09-26 11:53:30.925 +03:00 [INF] Executed DbCommand (13ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT OR IGNORE INTO "__EFMigrationsLock"("Id", "Timestamp") VALUES(1, '2026-09-26 08:53:30.9053046+00:00');
+SELECT changes();
+2026-09-26 11:53:31.315 +03:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE IF NOT EXISTS "__EFMigrationsHistory" (
+    "MigrationId" TEXT NOT NULL CONSTRAINT "PK___EFMigrationsHistory" PRIMARY KEY,
+    "ProductVersion" TEXT NOT NULL
+);
+2026-09-26 11:53:31.419 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+2026-09-26 11:53:31.452 +03:00 [INF] Executed DbCommand (6ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+2026-09-26 11:53:31.499 +03:00 [INF] No migrations were applied. The database is already up to date.
+2026-09-26 11:53:31.517 +03:00 [INF] Executed DbCommand (6ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "__EFMigrationsLock";
+2026-09-26 11:53:32.521 +03:00 [INF] Executed DbCommand (6ms) [Parameters=[@normalizedName='?' (Size = 5)], CommandType='"Text"', CommandTimeout='30']
+SELECT "a"."Id", "a"."ConcurrencyStamp", "a"."Name", "a"."NormalizedName"
+FROM "AspNetRoles" AS "a"
+WHERE "a"."NormalizedName" = @normalizedName
+LIMIT 1
+2026-09-26 11:53:32.642 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[@normalizedName='?' (Size = 4)], CommandType='"Text"', CommandTimeout='30']
+SELECT "a"."Id", "a"."ConcurrencyStamp", "a"."Name", "a"."NormalizedName"
+FROM "AspNetRoles" AS "a"
+WHERE "a"."NormalizedName" = @normalizedName
+LIMIT 1
+2026-09-26 11:53:32.662 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[@normalizedName='?' (Size = 5)], CommandType='"Text"', CommandTimeout='30']
+SELECT "a"."Id", "a"."ConcurrencyStamp", "a"."Name", "a"."NormalizedName"
+FROM "AspNetRoles" AS "a"
+WHERE "a"."NormalizedName" = @normalizedName
+LIMIT 1
+2026-09-26 11:53:32.684 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[@normalizedEmail='?' (Size = 17)], CommandType='"Text"', CommandTimeout='30']
+SELECT "a"."Id", "a"."AccessFailedCount", "a"."City", "a"."ConcurrencyStamp", "a"."Country", "a"."Email", "a"."EmailConfirmed", "a"."LockoutEnabled", "a"."LockoutEnd", "a"."NormalizedEmail", "a"."NormalizedUserName", "a"."PasswordHash", "a"."PhoneNumber", "a"."PhoneNumberConfirmed", "a"."SecurityStamp", "a"."Street", "a"."TwoFactorEnabled", "a"."UserName"
+FROM "AspNetUsers" AS "a"
+WHERE "a"."NormalizedEmail" = @normalizedEmail
+LIMIT 2
+2026-09-26 11:53:32.900 +03:00 [INF] Now listening on: http://localhost:5135
+2026-09-26 11:53:32.904 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-09-26 11:53:32.905 +03:00 [INF] Hosting environment: Development
+2026-09-26 11:53:32.905 +03:00 [INF] Content root path: /home/motamerf/MoRoom/Play_Ground/Projects/E-Commerce Proj-FullStack/Backend/WebApp
+2026-09-26 12:06:06.012 +03:00 [INF] Application is shutting down...

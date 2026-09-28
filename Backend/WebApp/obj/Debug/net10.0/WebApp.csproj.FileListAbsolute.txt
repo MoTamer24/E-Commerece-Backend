@@ -9,7 +9,6 @@
 /home/motamerf/MoRoom/Play_Ground/Projects/E-Commerce Proj-FullStack/Backend/WebApp/bin/Debug/net10.0/Humanizer.dll
 /home/motamerf/MoRoom/Play_Ground/Projects/E-Commerce Proj-FullStack/Backend/WebApp/bin/Debug/net10.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll
 /home/motamerf/MoRoom/Play_Ground/Projects/E-Commerce Proj-FullStack/Backend/WebApp/bin/Debug/net10.0/Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
-/home/motamerf/MoRoom/Play_Ground/Projects/E-Commerce Proj-FullStack/Backend/WebApp/bin/Debug/net10.0/Microsoft.AspNetCore.OpenApi.dll
 /home/motamerf/MoRoom/Play_Ground/Projects/E-Commerce Proj-FullStack/Backend/WebApp/bin/Debug/net10.0/Microsoft.Build.dll
 /home/motamerf/MoRoom/Play_Ground/Projects/E-Commerce Proj-FullStack/Backend/WebApp/bin/Debug/net10.0/Microsoft.Build.Framework.dll
 /home/motamerf/MoRoom/Play_Ground/Projects/E-Commerce Proj-FullStack/Backend/WebApp/bin/Debug/net10.0/Microsoft.Build.Tasks.Core.dll
@@ -182,3 +181,6 @@
 /home/motamerf/MoRoom/Play_Ground/Projects/E-Commerce Proj-FullStack/Backend/WebApp/bin/Debug/net10.0/Serilog.Sinks.Console.dll
 /home/motamerf/MoRoom/Play_Ground/Projects/E-Commerce Proj-FullStack/Backend/WebApp/bin/Debug/net10.0/Serilog.Sinks.Debug.dll
 /home/motamerf/MoRoom/Play_Ground/Projects/E-Commerce Proj-FullStack/Backend/WebApp/bin/Debug/net10.0/Serilog.Sinks.File.dll
+/home/motamerf/MoRoom/Play_Ground/Projects/E-Commerce Proj-FullStack/Backend/WebApp/bin/Debug/net10.0/Swashbuckle.AspNetCore.Swagger.dll
+/home/motamerf/MoRoom/Play_Ground/Projects/E-Commerce Proj-FullStack/Backend/WebApp/bin/Debug/net10.0/Swashbuckle.AspNetCore.SwaggerGen.dll
+/home/motamerf/MoRoom/Play_Ground/Projects/E-Commerce Proj-FullStack/Backend/WebApp/bin/Debug/net10.0/Swashbuckle.AspNetCore.SwaggerUI.dll

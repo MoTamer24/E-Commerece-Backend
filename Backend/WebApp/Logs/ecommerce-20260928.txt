@@ -1,0 +1,55 @@
+2026-09-28 05:15:49.934 +03:00 [WRN] The foreign key property 'Review.UserId1' was created in shadow state because a conflicting property with the simple name 'UserId' exists in the entity type, but is either not mapped, is already used for another relationship, or is incompatible with the associated primary key type. See https://aka.ms/efcore-relationships for information on mapping relationships in EF Core.
+2026-09-28 05:15:51.462 +03:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2026-09-28 05:15:51.577 +03:00 [INF] Executed DbCommand (48ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsLock' AND "type" = 'table';
+2026-09-28 05:15:51.614 +03:00 [INF] Executed DbCommand (9ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT OR IGNORE INTO "__EFMigrationsLock"("Id", "Timestamp") VALUES(1, '2026-09-28 02:15:51.6009816+00:00');
+SELECT changes();
+2026-09-28 05:15:51.858 +03:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE IF NOT EXISTS "__EFMigrationsHistory" (
+    "MigrationId" TEXT NOT NULL CONSTRAINT "PK___EFMigrationsHistory" PRIMARY KEY,
+    "ProductVersion" TEXT NOT NULL
+);
+2026-09-28 05:15:51.909 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+2026-09-28 05:15:51.926 +03:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+2026-09-28 05:15:51.960 +03:00 [INF] No migrations were applied. The database is already up to date.
+2026-09-28 05:15:51.970 +03:00 [INF] Executed DbCommand (6ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "__EFMigrationsLock";
+2026-09-28 05:15:53.224 +03:00 [INF] Executed DbCommand (8ms) [Parameters=[@normalizedName='?' (Size = 5)], CommandType='"Text"', CommandTimeout='30']
+SELECT "a"."Id", "a"."ConcurrencyStamp", "a"."Name", "a"."NormalizedName"
+FROM "AspNetRoles" AS "a"
+WHERE "a"."NormalizedName" = @normalizedName
+LIMIT 1
+2026-09-28 05:15:53.374 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[@normalizedName='?' (Size = 4)], CommandType='"Text"', CommandTimeout='30']
+SELECT "a"."Id", "a"."ConcurrencyStamp", "a"."Name", "a"."NormalizedName"
+FROM "AspNetRoles" AS "a"
+WHERE "a"."NormalizedName" = @normalizedName
+LIMIT 1
+2026-09-28 05:15:53.406 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[@normalizedName='?' (Size = 5)], CommandType='"Text"', CommandTimeout='30']
+SELECT "a"."Id", "a"."ConcurrencyStamp", "a"."Name", "a"."NormalizedName"
+FROM "AspNetRoles" AS "a"
+WHERE "a"."NormalizedName" = @normalizedName
+LIMIT 1
+2026-09-28 05:15:53.444 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[@normalizedEmail='?' (Size = 17)], CommandType='"Text"', CommandTimeout='30']
+SELECT "a"."Id", "a"."AccessFailedCount", "a"."City", "a"."ConcurrencyStamp", "a"."Country", "a"."Email", "a"."EmailConfirmed", "a"."LockoutEnabled", "a"."LockoutEnd", "a"."NormalizedEmail", "a"."NormalizedUserName", "a"."PasswordHash", "a"."PhoneNumber", "a"."PhoneNumberConfirmed", "a"."SecurityStamp", "a"."Street", "a"."TwoFactorEnabled", "a"."UserName"
+FROM "AspNetUsers" AS "a"
+WHERE "a"."NormalizedEmail" = @normalizedEmail
+LIMIT 2
+2026-09-28 05:15:53.735 +03:00 [INF] Now listening on: http://localhost:5135
+2026-09-28 05:15:53.740 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-09-28 05:15:53.742 +03:00 [INF] Hosting environment: Development
+2026-09-28 05:15:53.742 +03:00 [INF] Content root path: /home/motamerf/MoRoom/Play_Ground/Projects/E-Commerce Proj-FullStack/Backend/WebApp
+2026-09-28 05:21:00.897 +03:00 [WRN] Failed to determine the https port for redirect.
+2026-09-28 05:21:00.968 +03:00 [INF] HTTP GET / responded 404 in 106.2093 ms
+2026-09-28 05:21:26.700 +03:00 [INF] HTTP GET / responded 404 in 10.1037 ms
+2026-09-28 05:21:31.904 +03:00 [INF] HTTP GET /swagger responded 301 in 2.4202 ms
+2026-09-28 05:21:32.058 +03:00 [INF] HTTP GET /swagger/index.html responded 200 in 127.9368 ms
+2026-09-28 05:21:32.176 +03:00 [INF] HTTP GET /swagger/swagger-ui-standalone-preset.js responded 200 in 35.2686 ms
+2026-09-28 05:21:32.178 +03:00 [INF] HTTP GET /swagger/swagger-ui.css responded 200 in 40.2883 ms
+2026-09-28 05:21:32.179 +03:00 [INF] HTTP GET /swagger/swagger-ui-bundle.js responded 200 in 40.4592 ms
+2026-09-28 05:21:32.893 +03:00 [INF] HTTP GET /swagger/favicon-32x32.png responded 200 in 1.7812 ms
+2026-09-28 05:21:33.087 +03:00 [INF] HTTP GET /swagger/v1/swagger.json responded 200 in 233.7114 ms
